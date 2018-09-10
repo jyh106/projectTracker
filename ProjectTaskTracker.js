@@ -1,32 +1,37 @@
 
 const addNewProjectButton = document.getElementsByClassName("addButton")[0];
 const addTaskButton = document.getElementsByClassName("addButton")[1];
+
+const toDoList = document.getElementsByClassName("toDoList")[0];
+const inProgressList = document.getElementsByClassName('inProgressList')[0];
+const doneList = document.getElementsByClassName('doneList')[0];
 var toDoTaskNumber = 0;
 var projectNumber = 0;
 
 function addToDoTextarea() {
 	const newTask = document.createElement('textarea');
 	newTask.classList.add("createNewTask" + toDoTaskNumber);
+	newTask.classList.add("tasks");
+	newTask.setAttribute("draggable", "true");
 	return newTask;
 }
 
-function addToDoTask(){
-	const newTaskForm = document.createElement('textarea');
-	newTaskForm.classList.add("createNewTask" + toDoTaskNumber);
-	newTaskForm.classList.add("tasks");
-	newTaskForm.setAttribute("draggable", "true");
+function addNewProjectTextarea() {
+	const newProjectTextarea = document.createElement('textarea');
+	newProjectTextarea.classList.add("createNewProject" + projectNumber);
+	newProjectTextarea.classList.add("projects");
+	newProjectTextarea.setAttribute("draggable", "true");
+	return newProjectTextarea
+}
 
-	
-	const toDoList = document.getElementsByClassName("toDoList")[0];
+function addToDoTask(){
+	const newTaskForm = addToDoTextarea();
 	toDoList.appendChild(newTaskForm);
 	toDoTaskNumber++;
 }
 
 function addNewProject() {
-	const newProject = document.createElement('textarea');
-	newProject.classList.add("createNewProject" + projectNumber);
-	newProject.classList.add("projects");
-	newProject.setAttribute("draggable", "true");
+	const newProject = addNewProjectTextarea();
 
 	const projectList = document.getElementsByClassName("sideBar")[0];
 	projectList.appendChild(newProject);
@@ -65,10 +70,6 @@ if(tasks){
 // draggable.on('drag:start', () => console.log('drag:start'));
 // draggable.on('drag:move', () => console.log('drag:move'));
 // draggable.on('drag:stop', () => console.log('drag:stop'));
-
-const toDoList = document.getElementsByClassName('toDoList')[0];
-const inProgressList = document.getElementsByClassName('inProgressList')[0];
-const doneList = document.getElementsByClassName('doneList')[0];
 
 const toDoListWidth = toDoList.clientWidth;
 const toDoListHeight = toDoList.clientHeight;
