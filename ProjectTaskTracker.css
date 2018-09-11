@@ -32,6 +32,7 @@
 	border-radius: 5px;
 	vertical-align: top;
 	outline: none;
+	overflow:scroll;
 }
 
 h3{
@@ -111,8 +112,9 @@ h3{
 }
 
 textarea {
+	z-index: 11;
 	position: relative;
-	width: 95%;
+	width: 300px;
 	border: 2px solid #CED5EA;
 	font-size:23px;
 	border-radius: 5px;
@@ -121,3 +123,6 @@ textarea {
 	margin-bottom: 5px;
 }
 
+.draggable-mirror.tasks {
+	background: blue;
+}
