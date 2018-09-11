@@ -4,8 +4,8 @@
 const addNewProjectButton = document.getElementsByClassName("addButton")[0];
 const addTaskButton = document.getElementsByClassName("addButton")[1];
 
-const deleteProjectButton = document.getElementsByClassName("deleteButton")[0];
-const deleteTaskButton = document.getElementsByClassName('deleteButton')[1];
+const deleteButton__Project = document.getElementsByClassName("deleteButton")[0];
+const deleteButton__Task = document.getElementsByClassName('deleteButton')[1];
 
 const projectList = document.getElementsByClassName('sideBar')[0];
 const toDoList = document.getElementsByClassName("toDoList")[0];
@@ -57,7 +57,7 @@ const doneTaskDraggable = new Draggable.Draggable(doneList, {
   		draggable: '.tasks'
 	});
 
-const threeLists = [toDoList, inProgressList, doneList];
+const draggableTargets = [toDoList, inProgressList, doneList];
 
 let currentMousePositionX = 0;
 let currentMousePositionY = 0;
@@ -65,22 +65,22 @@ let currentMousePositionY = 0;
 let currentDraggingItem;
 let dragFromList;
 
-function getDraggingElement(event) {
+function assignDraggingElement(event) {
 	const originalSource = event.data.originalSource;
 	const elementClassName = originalSource.className.split(" ")[0];
 	currentDraggingItem = document.getElementsByClassName(elementClassName)[0];
 }
 
 function dragStart(event){
-	//find out which list the element came from and mark down which element is being dragged
+	// find out which list the element came from and mark down which element is being dragged
 	dragFromListName = (event.sourceContainer.className).split(" ")[1];
-	for(let list of threeLists){
+	for(let list of draggableTargets){
 		let listName = list.className.split(" ")[1];
 		if (listName == dragFromListName){
 			dragFromList = list;
 		}
 	}
-	getDraggingElement(event);
+	assignDraggingElement(event);
 }
 
 function onDragMove(event) {
@@ -104,7 +104,7 @@ function dragStopMove(event){
 	//find out which list the element is suppose to add to
 	let dragToList;
 
-	for(let list of threeLists){
+	for(let list of draggableTargets){
 		if(isValidDropPosition(list)) {
 			dragToList = list;
 		}
@@ -145,7 +145,7 @@ function deleteTasks(){
 	// currentSelectedElement.parentNode.removeChild(focusElements[focusElements.size() - 2]);
 }
 
-deleteTaskButton.addEventListener('click', ()=>deleteTasks());
+deleteButton__Task.addEventListener('click', ()=>deleteTasks());
 //TODO: add created date to tasks
 
 /*------------------------------------------------------------------------------------------*/
