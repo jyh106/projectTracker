@@ -45,12 +45,43 @@ addNewProjectButton.addEventListener('click', ()=> addNewProject());
 /*---------------------------------------------------------------------------------------*/
 
 /*----------------------------develop draggable event------------------------------------*/
-const taskDraggable = new Draggable.Draggable(toDoList, {
+const toDoTaskDraggable = new Draggable.Draggable(toDoList, {
   		draggable: '.tasks'
 	});
 
+const progressTaskDraggable = new Draggable.Draggable(inProgressList, {
+  		draggable: '.tasks'
+	});
+
+const doneTaskDraggable = new Draggable.Draggable(doneList, {
+  		draggable: '.tasks'
+	});
+
+const threeLists = [toDoList, inProgressList, doneList];
+
 let currentMousePositionX = 0;
 let currentMousePositionY = 0;
+
+let currentDraggingItem;
+let dragFromList;
+
+function getDraggingElement(event) {
+	const originalSource = event.data.originalSource;
+	const elementClassName = originalSource.className.split(" ")[0];
+	currentDraggingItem = document.getElementsByClassName(elementClassName)[0];
+}
+
+function dragStart(event){
+	//find out which list the element came from and mark down which element is being dragged
+	dragFromListName = (event.sourceContainer.className).split(" ")[1];
+	for(let list of threeLists){
+		let listName = list.className.split(" ")[1];
+		if (listName == dragFromListName){
+			dragFromList = list;
+		}
+	}
+	getDraggingElement(event);
+}
 
 function onDragMove(event) {
 	currentMousePositionX = event.sensorEvent.data.clientX;
@@ -59,23 +90,47 @@ function onDragMove(event) {
 
 function isValidDropPosition(list){
 	const listCoordinates = list.getBoundingClientRect();
-	if((listCoordinates.left < currentMousePositionX < listCoordinates.right) 
-		&& (listCoordinates.bottom < currentMousePositionY < listCoordinates.top)){
+	if((listCoordinates.left < currentMousePositionX)
+		 &&(currentMousePositionX < listCoordinates.right) 
+		&&(listCoordinates.top < currentMousePositionY) 
+		&& (currentMousePositionY < listCoordinates.bottom)){
 		return true;
 	}
 	return false;
 }
 
+
 function dragStopMove(event){
-	// TODO figure out the list the task came from -- then delete the task 
-		// ---> event.data.sourceContainer.className (parse it, then get second item)
-	// .... then figure out which list it landed at when mouse up, then add it to the list 
-	console.log(event);
+	//find out which list the element is suppose to add to
+	let dragToList;
+
+	for(let list of threeLists){
+		if(isValidDropPosition(list)) {
+			dragToList = list;
+		}
+	}
+	if(!dragToList){
+		dragToList = dragFromList;
+	}
+
+	//add that element to the new selected list
+	dragToList.appendChild(currentDraggingItem);
 }
 
-// taskDraggable.on('drag:start', () => console.log('drag:start'));
-taskDraggable.on('drag:move', (event) => onDragMove(event));
-taskDraggable.on('drag:stop', (event) => dragStopMove(event)); 
+toDoTaskDraggable.on('drag:start', (event) => dragStart(event));
+toDoTaskDraggable.on('drag:move', (event) => onDragMove(event));
+toDoTaskDraggable.on('drag:stop', (event) => dragStopMove(event)); 
+
+progressTaskDraggable.on('drag:start', (event) => dragStart(event));
+progressTaskDraggable.on('drag:move', (event) => onDragMove(event));
+progressTaskDraggable.on('drag:stop', (event) => dragStopMove(event));
+
+doneTaskDraggable.on('drag:start', (event) => dragStart(event));
+doneTaskDraggable.on('drag:move', (event) => onDragMove(event));
+doneTaskDraggable.on('drag:stop', (event) => dragStopMove(event));
+
+
+
 
 // TODO -- function -- add to the right spot in the list;
 
