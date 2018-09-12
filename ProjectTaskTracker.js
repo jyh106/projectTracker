@@ -18,6 +18,7 @@ let projectNumber = 0;
 function addToDoTextarea() {
  	const newTask = document.createElement('textarea');
 	newTask.classList.add("createNewTask" + toDoTaskNumber, "tasks");
+	newTask.addEventListener("focus", ()=> createActiveElement__withArrowButton());
 	return newTask;
 }
 
@@ -131,13 +132,47 @@ doneTaskDraggable.on('drag:stop', (event) => dragStopMove(event));
 
 
 
+/*-----------------------------develop sortable feature------------------------------------*/
+// TODO -- add sort buttons to the side of the focus object
 
-// TODO -- function -- add to the right spot in the list;
+function createArrowButtonDiv() {
+	const arrowButtons = document.createElement('div');
+	arrowButtons.classList.add("arrowButton");
+
+	const arrowButton__up = document.createElement('i');
+	arrowButton__up.classList.add("fa", "fa-arrow-up");
+
+	const arrowButton__down = document.createElement('i');
+	arrowButton__down.classList.add("fa", "fa-arrow-down");
+
+	arrowButtons.appendChild(arrowButton__up);
+	arrowButtons.appendChild(arrowButton__down);
+
+	return arrowButtons;
+}
+
+function createActiveElement__withArrowButton() {
+	const activeElement = document.activeElement;
+	const activeElementCopy = activeElement.cloneNode();
+
+	const arrowButtons = createArrowButtonDiv();
+
+	const activeElement__withArrowButton = document.createElement('div');
+	activeElement__withArrowButton.classList.add("active");
+
+	activeElement__withArrowButton.appendChild(activeElementCopy);
+	activeElement__withArrowButton.appendChild(arrowButtons);
+
+	activeElement.parentNode.replaceChild(activeElement__withArrowButton, activeElement);
+}
+
+// TODO -- add css to the arrow buttons 
+// then figure out sorting functions
 
 /*----------------------------------delete tasks/project button------------------------------*/
 var focusElements = [];
-let currentSelectedElement = document.activeElement;
-focusElements.push(currentSelectedElement);
+// let currentSelectedElement = document.activeElement;
+// focusElements.push(currentSelectedElement);
 
 function deleteTasks(){
 	console.log(focusElements);
@@ -145,7 +180,7 @@ function deleteTasks(){
 	// currentSelectedElement.parentNode.removeChild(focusElements[focusElements.size() - 2]);
 }
 
-deleteButton__Task.addEventListener('click', ()=>deleteTasks());
+// deleteButton__Task.addEventListener('click', ()=>deleteTasks());
 //TODO: add created date to tasks
 
 /*------------------------------------------------------------------------------------------*/
