@@ -3,6 +3,9 @@
 <head>
 	<link rel="stylesheet" type="text/css" href="ProjectTaskTracker.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+
 </head>
 
 <body>
@@ -23,14 +26,20 @@
 			To Do
 			<button class="addButton"><i class="fa fa-plus-square" aria-hidden="true"></i></button>
 		</h3>
+		<ul class="taskList--toDo">
+			</ul>
 	</div>
 
 	<div class="divider inProgressList">
 		<h3 class="inProgress">In Progress</h3>
+		<ul class="taskList--inProgress">
+			</ul>
 	</div>
 
 	<div class="divider doneList">
 		<h3 class="done">Done</h3> 
+		<ul class="taskList--done">
+			</ul>
 	</div>
 
 	<script src="./draggable.js"></script>

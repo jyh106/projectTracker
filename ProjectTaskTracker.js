@@ -15,11 +15,27 @@ const doneList = document.getElementsByClassName('doneList')[0];
 let toDoTaskNumber = 0;
 let projectNumber = 0;
 
+const taskList__toDo = document.getElementsByClassName("taskList--toDo")[0];
+const toDotasks = taskList__toDo.getElementsByTagName("textarea");
+
 function addToDoTextarea() {
- 	const newTask = document.createElement('textarea');
-	newTask.classList.add("createNewTask" + toDoTaskNumber, "tasks");
-	newTask.addEventListener("focus", ()=> createActiveElement__withArrowButton());
-	return newTask;
+
+	const taskDiv = document.createElement('div');
+	taskDiv.classList.add("individualTask");
+
+ 	const newTextarea = document.createElement('textarea');
+	newTextarea.classList.add("createNewTask" + toDoTaskNumber, "tasks");	
+
+	newTextarea.addEventListener("focus", (event)=> displayArrowButtons(event));
+	newTextarea.addEventListener("onblur", (event)=> textAreaOnBlur(event));  //HELP!!!!!!This somehow is not working
+
+	//add arrow buttons and display only when it is on focus; 
+	const arrowButtons = createArrowButtonDiv();
+
+	taskDiv.appendChild(newTextarea);
+	taskDiv.appendChild(arrowButtons);
+
+	return taskDiv;
 }
 
 function addNewProjectTextarea() {
@@ -30,7 +46,7 @@ function addNewProjectTextarea() {
 
 function addToDoTask(){
 	const newTaskForm = addToDoTextarea();
-	toDoList.appendChild(newTaskForm);
+	taskList__toDo.appendChild(newTaskForm);
 	toDoTaskNumber++;
 }
 
@@ -104,18 +120,14 @@ function isValidDropPosition(list){
 function dragStopMove(event){
 	//find out which list the element is suppose to add to
 	let dragToList;
-
 	for(let list of draggableTargets){
 		if(isValidDropPosition(list)) {
-			dragToList = list;
+			if(list !== dragFromList){
+				dragToList = list;
+				dragToList.appendChild(currentDraggingItem);
+			}
 		}
 	}
-	if(!dragToList){
-		dragToList = dragFromList;
-	}
-
-	//add that element to the new selected list
-	dragToList.appendChild(currentDraggingItem);
 }
 
 toDoTaskDraggable.on('drag:start', (event) => dragStart(event));
@@ -137,13 +149,15 @@ doneTaskDraggable.on('drag:stop', (event) => dragStopMove(event));
 
 function createArrowButtonDiv() {
 	const arrowButtons = document.createElement('div');
-	arrowButtons.classList.add("arrowButton");
+	arrowButtons.classList.add("arrowButtons" + toDoTaskNumber, "arrowButtons");
 
 	const arrowButton__up = document.createElement('i');
-	arrowButton__up.classList.add("fa", "fa-arrow-up");
+	arrowButton__up.classList.add("fas", "fa-caret-up");
+	arrowButton__up.addEventListener('click', ()=> moveUp());
 
 	const arrowButton__down = document.createElement('i');
-	arrowButton__down.classList.add("fa", "fa-arrow-down");
+	arrowButton__down.classList.add("fas", "fa-caret-down");
+	// arrowButton__down.addEventListener('click', (event)=> moveDown(event));
 
 	arrowButtons.appendChild(arrowButton__up);
 	arrowButtons.appendChild(arrowButton__down);
@@ -151,19 +165,27 @@ function createArrowButtonDiv() {
 	return arrowButtons;
 }
 
-function createActiveElement__withArrowButton() {
+
+function displayArrowButtons(event) {
+	const onFocusTask = event.target.parentNode;
+	const onFocusTask__arrowButton = onFocusTask.getElementsByClassName("arrowButtons")[0];
+	onFocusTask__arrowButton.style.visibility = "visible";
+}
+
+function fileter__getTextarea(element) {
+	if(element.tagName == "textarea"){
+		return true;
+	} 
+	return false;
+}
+function moveUp() {
 	const activeElement = document.activeElement;
-	const activeElementCopy = activeElement.cloneNode();
+	console.log(activeElement);
 
-	const arrowButtons = createArrowButtonDiv();
+}
 
-	const activeElement__withArrowButton = document.createElement('div');
-	activeElement__withArrowButton.classList.add("active");
-
-	activeElement__withArrowButton.appendChild(activeElementCopy);
-	activeElement__withArrowButton.appendChild(arrowButtons);
-
-	activeElement.parentNode.replaceChild(activeElement__withArrowButton, activeElement);
+function restoreOriginalTextarea() {
+	console.log("it is out of focus");
 }
 
 // TODO -- add css to the arrow buttons 
