@@ -45,15 +45,16 @@ h3{
 	margin-bottom: 8px;
 }
 
-.toDo {
+.toDoHeader {
 	background: #ff9999;
+	position: static;
 }
 
 .toDoList {
 	background: #fbeded;
 }
 
-.inProgress {
+.inProgressHeader {
 	background: #ffdd99;
 }
 
@@ -61,7 +62,7 @@ h3{
 	background: #fdf6ef;
 }
 
-.done {
+.doneHeader {
 	background:  #9fdfbf;
 }
 
