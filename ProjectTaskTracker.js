@@ -16,6 +16,7 @@ let toDoTaskNumber = 0;
 let projectNumber = 0;
 
 //for sortable purposes --recording the most recent changes in all three lists
+var list_project = [];
 var list_toDo = [];
 var list_inProgress = [];
 var list_done = [];
@@ -42,10 +43,32 @@ function addToDoTextarea() {
 }
 
 function addNewProjectTextarea() {
-	// TODO add buttons later
-	const newProjectTextarea = document.createElement('textarea');
-	newProjectTextarea.classList.add("createNewProject" + projectNumber, "projects");
-	return newProjectTextarea
+	const projectDiv = document.createElement('div');
+	projectDiv.classList.add("projectDiv" + projectNumber, "project");
+
+	//textarea div
+ 	const newTextarea = document.createElement('textarea');
+	newTextarea.classList.add("project" + projectNumber, "projects");
+	//button div
+	const arrowButtons = createArrowButtonDiv();
+
+	projectDiv.appendChild(newTextarea);
+	projectDiv.appendChild(arrowButtons);
+
+	newTextarea.addEventListener("blur", (event)=> removeArrowButtonDiv(event));
+	newTextarea.addEventListener("focus", (event)=> displayArrowButtons(event));
+
+	return projectDiv;
+}
+
+function addNewProject() {
+	const newProjectDiv = addNewProjectTextarea();
+	const projectList = document.getElementsByClassName("projects")[0];
+	projectList.appendChild(newProjectDiv);
+
+	projectNumber++;
+	//record history
+	list_project.push(newProjectDiv);
 }
 
 function addToDoTask(){
@@ -56,13 +79,6 @@ function addToDoTask(){
 
 	//record it to the list
 	list_toDo.push(newTaskForm);
-}
-
-function addNewProject() {
-	const newProject = addNewProjectTextarea();
-	const projectList = document.getElementsByClassName("projectList")[0];
-	projectList.appendChild(newProject);
-	projectNumber++;
 }
 
 addTaskButton.addEventListener('click', ()=> addToDoTask());
@@ -224,12 +240,15 @@ function findCurrentActiveList() {
 	if(currentListName == "toDoList"){
 		currentActiveList.push(list_toDo);
 		currentActiveList.push(toDoList);
-	} else if (currentListName == "inProgress"){
+	} else if (currentListName == "inProgressList"){
 		currentActiveList.push(list_inProgress);
 		currentActiveList.push(inProgressList);
-	} else {
+	} else if (currentListName == "doneList"){
 		currentActiveList.push(list_done);
 		currentActiveList.push(doneList);
+	} else {
+		currentActiveList.push(list_project);
+		currentActiveList.push(projectList);
 	}
 
 	return currentActiveList;
