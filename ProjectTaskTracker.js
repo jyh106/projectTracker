@@ -166,11 +166,12 @@ doneTaskDraggable.on('drag:stop', (event) => dragStopMove(event));
 /*-----------------------------develop sortable feature------------------------------------*/
 let currentSelectedElement;
 
-function removeArrowButtonDiv(event) {
+// TODO
+function removeArrowButtonDiv(event) { //TRYING TO find out if the clicked element on blur is the arrow button
 	currentSelectedElement = event.target.parentNode;
-	window.onclick = e => {
-    console.log(e);
-	}
+	// window.onclick = e => {
+  //   console.log(e);
+	// }
 	const onFocusTask = event.target.parentNode;
 	const onFocusTask__arrowButton = onFocusTask.getElementsByClassName("arrowButtons")[0];
 	onFocusTask__arrowButton.style = "visibility : hidden";
