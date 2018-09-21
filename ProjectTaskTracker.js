@@ -26,16 +26,15 @@ function addToDoTextarea() {
 	taskDiv.classList.add("taskDiv" + toDoTaskNumber, "task");
 
  	const newTextarea = document.createElement('textarea');
-	newTextarea.classList.add("task" + toDoTaskNumber, "tasks");	
+	newTextarea.classList.add("task" + toDoTaskNumber, "tasks");
 
-	newTextarea.addEventListener("focus", (event)=> displayArrowButtons(event));
-	newTextarea.addEventListener("blur", (event)=> removeArrowButtonDiv(event));
-
-	//add arrow buttons and display only when it is on focus; 
 	const arrowButtons = createArrowButtonDiv();
 
 	taskDiv.appendChild(newTextarea);
 	taskDiv.appendChild(arrowButtons);
+
+	newTextarea.addEventListener("blur", (event)=> removeArrowButtonDiv(event));
+	newTextarea.addEventListener("focus", (event)=> displayArrowButtons(event));
 
 	return taskDiv;
 }
@@ -114,8 +113,8 @@ function onDragMove(event) {
 function isValidDropPosition(list){
 	const listCoordinates = list.getBoundingClientRect();
 	if((listCoordinates.left < currentMousePositionX)
-		 &&(currentMousePositionX < listCoordinates.right) 
-		&&(listCoordinates.top < currentMousePositionY) 
+		 &&(currentMousePositionX < listCoordinates.right)
+		&&(listCoordinates.top < currentMousePositionY)
 		&& (currentMousePositionY < listCoordinates.bottom)){
 		return true;
 	}
@@ -140,7 +139,7 @@ function dragStopMove(event){
 function recordDraggingHistory() {
 	const draggingItemIndex = list_toDo.indexOf(currentDraggingItem);
 	list_toDo.splice(0,1);
-	
+
 	if(dragToList.className == "inProgress"){
 		list_inProgress.push(currentDraggingItem);
 	} else if (dragToList.className == "done"){
@@ -152,7 +151,7 @@ function recordDraggingHistory() {
 
 toDoTaskDraggable.on('drag:start', (event) => dragStart(event));
 toDoTaskDraggable.on('drag:move', (event) => onDragMove(event));
-toDoTaskDraggable.on('drag:stop', (event) => dragStopMove(event)); 
+toDoTaskDraggable.on('drag:stop', (event) => dragStopMove(event));
 
 progressTaskDraggable.on('drag:start', (event) => dragStart(event));
 progressTaskDraggable.on('drag:move', (event) => onDragMove(event));
@@ -169,7 +168,9 @@ let currentSelectedElement;
 
 function removeArrowButtonDiv(event) {
 	currentSelectedElement = event.target.parentNode;
-
+	window.onclick = e => {
+    console.log(e);
+	}
 	const onFocusTask = event.target.parentNode;
 	const onFocusTask__arrowButton = onFocusTask.getElementsByClassName("arrowButtons")[0];
 	onFocusTask__arrowButton.style = "visibility : hidden";
@@ -181,7 +182,7 @@ function createArrowButtonDiv() {
 
 	const arrowButton__up = document.createElement('i');
 	arrowButton__up.classList.add("fas", "fa-caret-up");
-	arrowButton__up.addEventListener('click', (event)=> moveUp(event));
+	arrowButton__up.addEventListener('mousedown', (event)=> moveUp(event));
 
 	const arrowButton__down = document.createElement('i');
 	arrowButton__down.classList.add("fas", "fa-caret-down");
@@ -189,6 +190,7 @@ function createArrowButtonDiv() {
 
 	arrowButtons.appendChild(arrowButton__up);
 	arrowButtons.appendChild(arrowButton__down);
+
 
 	return arrowButtons;
 }
@@ -227,13 +229,6 @@ function produceNewList(currentActiveList, originalListUL){
 	return copyULdiv;
 }
 
-// function getTextValueFromNode(node) {
-// 	return node.children[0].value;
-// }
-
-// function setTextValueOnNode(node, newValue) {
-// 	node.children[0].value = newValue;
-// }
 
 function moveUp(event) {
 	let currentActiveList = findCurrentActiveList()[0];
@@ -243,20 +238,10 @@ function moveUp(event) {
 	const currentIndex = currentActiveList.indexOf(currentSelectedElement);
 
 	if (currentIndex > 0) {
-		console.log(currentIndex);
 		const newIndex = currentIndex - 1;
 
 		let sourceNode = currentActiveList[currentIndex];
 		let targetNode = currentActiveList[newIndex];
-
-		// const targetTextValue = getTextValueFromNode(targetNode);
-		// const sourceTextValue = getTextValueFromNode(sourceNode);
-
-		// const targetElementDiv = targetNode.cloneNode(true);
-		// const sourceElementDiv = sourceNode.cloneNode(true);
-
-		// setTextValueOnNode(targetElementDiv, sourceTextValue);
-		// setTextValueOnNode(sourceElementDiv, targetTextValue);
 
 		currentActiveList[newIndex] = sourceNode;
 		currentActiveList[currentIndex] = targetNode;
@@ -267,13 +252,10 @@ function moveUp(event) {
 	originalList.removeChild(originalListUL);
 
 	originalList.appendChild(newList);
+
+	currentSelectedElement.focus();
 }
 
-
-
-function restoreOriginalTextarea() {
-	console.log("it is out of focus");
-}
 
 /*----------------------------------delete tasks/project button------------------------------*/
 var focusElements = [];
@@ -290,4 +272,3 @@ function deleteTasks(){
 //TODO: add created date to tasks
 
 /*------------------------------------------------------------------------------------------*/
-
