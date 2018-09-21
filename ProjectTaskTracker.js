@@ -4,10 +4,10 @@
 const addNewProjectButton = document.getElementsByClassName("addButton")[0];
 const addTaskButton = document.getElementsByClassName("addButton")[1];
 
-const deleteButton__Project = document.getElementsByClassName("deleteButton")[0];
-const deleteButton__Task = document.getElementsByClassName('deleteButton')[1];
+// const deleteButton__Project = document.getElementsByClassName("deleteButton")[0];
+// const deleteButton__Task = document.getElementsByClassName('deleteButton')[1];
 
-const projectList = document.getElementsByClassName('sideBar')[0];
+const projectList = document.getElementsByClassName('projectList')[0];
 const toDoList = document.getElementsByClassName("toDoList")[0];
 const inProgressList = document.getElementsByClassName('inProgressList')[0];
 const doneList = document.getElementsByClassName('doneList')[0];
@@ -22,12 +22,14 @@ var list_done = [];
 
 
 function addToDoTextarea() {
+	//creating a parent div for the textarea and button elements
 	const taskDiv = document.createElement('div');
 	taskDiv.classList.add("taskDiv" + toDoTaskNumber, "task");
 
+	//textarea div
  	const newTextarea = document.createElement('textarea');
 	newTextarea.classList.add("task" + toDoTaskNumber, "tasks");
-
+	//button div
 	const arrowButtons = createArrowButtonDiv();
 
 	taskDiv.appendChild(newTextarea);
@@ -40,6 +42,7 @@ function addToDoTextarea() {
 }
 
 function addNewProjectTextarea() {
+	// TODO add buttons later
 	const newProjectTextarea = document.createElement('textarea');
 	newProjectTextarea.classList.add("createNewProject" + projectNumber, "projects");
 	return newProjectTextarea
@@ -57,7 +60,7 @@ function addToDoTask(){
 
 function addNewProject() {
 	const newProject = addNewProjectTextarea();
-	const projectList = document.getElementsByClassName("sideBar")[0];
+	const projectList = document.getElementsByClassName("projectList")[0];
 	projectList.appendChild(newProject);
 	projectNumber++;
 }
@@ -165,17 +168,22 @@ doneTaskDraggable.on('drag:stop', (event) => dragStopMove(event));
 
 /*-----------------------------develop sortable feature------------------------------------*/
 let currentSelectedElement;
+let shouldRemoveArrows = true;
 
-// TODO
-function removeArrowButtonDiv(event) { //TRYING TO find out if the clicked element on blur is the arrow button
-	currentSelectedElement = event.target.parentNode;
-	// window.onclick = e => {
-  //   console.log(e);
-	// }
-	const onFocusTask = event.target.parentNode;
-	const onFocusTask__arrowButton = onFocusTask.getElementsByClassName("arrowButtons")[0];
-	onFocusTask__arrowButton.style = "visibility : hidden";
+function removeArrowButtonDiv(event) {
+	 if (shouldRemoveArrows) {
+    const onFocusTask = event.target.parentNode;
+    const onFocusTask__arrowButton = onFocusTask.getElementsByClassName("arrowButtons")[0];
+    onFocusTask__arrowButton.style = "visibility : hidden";
+  }
 }
+
+function onArrowMouseDown(e) {
+  shouldRemoveArrows = false;
+  // This helps prevent the event from reaching the window's mousedown.
+  e.stopPropagation();
+}
+
 
 function createArrowButtonDiv() {
 	const arrowButtons = document.createElement('div');
@@ -183,19 +191,24 @@ function createArrowButtonDiv() {
 
 	const arrowButton__up = document.createElement('i');
 	arrowButton__up.classList.add("fas", "fa-caret-up");
-	arrowButton__up.addEventListener('mousedown', (event)=> moveUp(event));
+	arrowButton__up.addEventListener('mousedown', (e)=> onArrowMouseDown(e));
+	arrowButton__up.addEventListener('click', (event)=> moveUp(event));
+   // A Window mousedown listener will help set the shouldRemoveArrows to be true.
+  // Because if the user mousedowns on anywhere other than the arrows, the arrows should be removed
+  window.addEventListener('mousedown', () => {
+		shouldRemoveArrows = true;
+  });
 
 	const arrowButton__down = document.createElement('i');
 	arrowButton__down.classList.add("fas", "fa-caret-down");
-	// arrowButton__down.addEventListener('click', (event)=> moveDown(event));
+	arrowButton__down.addEventListener('mousedown', (e)=> onArrowMouseDown(e));
+	arrowButton__down.addEventListener('click', (event)=> moveDown(event));
 
 	arrowButtons.appendChild(arrowButton__up);
 	arrowButtons.appendChild(arrowButton__down);
 
-
 	return arrowButtons;
 }
-
 
 function displayArrowButtons(event) {
 	currentSelectedElement = event.target.parentNode;
@@ -232,12 +245,14 @@ function produceNewList(currentActiveList, originalListUL){
 
 
 function moveUp(event) {
+	let clickedElement_textarea = (event.srcElement.parentNode.parentNode.childNodes)[0];
+
 	let currentActiveList = findCurrentActiveList()[0];
+
 	const originalList = findCurrentActiveList()[1];
-	const originalListUL = originalList.getElementsByTagName('ul')[0]
+	const originalListUL = originalList.getElementsByTagName('ul')[0];
 
 	const currentIndex = currentActiveList.indexOf(currentSelectedElement);
-
 	if (currentIndex > 0) {
 		const newIndex = currentIndex - 1;
 
@@ -253,8 +268,34 @@ function moveUp(event) {
 	originalList.removeChild(originalListUL);
 
 	originalList.appendChild(newList);
+	clickedElement_textarea.focus();
+}
 
-	currentSelectedElement.focus();
+
+function moveDown(event) {
+	let clickedElement_textarea = (event.srcElement.parentNode.parentNode.childNodes)[0];
+	let currentActiveList = findCurrentActiveList()[0];
+
+	const originalList = findCurrentActiveList()[1];
+	const originalListUL = originalList.getElementsByTagName('ul')[0];
+
+	const currentIndex = currentActiveList.indexOf(currentSelectedElement);
+	if (currentIndex < (currentActiveList.length -1 )) {
+		const newIndex = currentIndex + 1;
+
+		let sourceNode = currentActiveList[currentIndex];
+		let targetNode = currentActiveList[newIndex];
+
+		currentActiveList[newIndex] = sourceNode;
+		currentActiveList[currentIndex] = targetNode;
+	}
+
+	let newList = produceNewList(currentActiveList, originalListUL);
+
+	originalList.removeChild(originalListUL);
+	originalList.appendChild(newList);
+
+	clickedElement_textarea.focus();
 }
 
 
