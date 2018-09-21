@@ -3,6 +3,9 @@
 <head>
 	<link rel="stylesheet" type="text/css" href="ProjectTaskTracker.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+
 </head>
 
 <body>
@@ -10,27 +13,33 @@
 		<h1>My Project Progress</h1>
 	</header>
 
-	<div class = "sideBar"> 
-		<h3 class="sideBarHeader">My Projects
-			<button class="deleteButton deleteProject"><i class="fa fa-minus-square" aria-hidden="true"></i></button>
-			<button class="addButton"><i class="fa fa-plus-square" aria-hidden="true"></i></button>
-		</h3> 
-	</div>
-
-	<div class="divider toDoList">
-		<h3 class="toDo">
-			<button class="deleteButton deleteTask"><i class="fa fa-minus-square" aria-hidden="true"></i></button>
-			To Do
+	<div class = "projectList">
+		<h3 class="projectListHeader">My Projects
+			<!-- <button class="deleteButton deleteProject"><i class="fa fa-minus-square" aria-hidden="true"></i></button> -->
 			<button class="addButton"><i class="fa fa-plus-square" aria-hidden="true"></i></button>
 		</h3>
 	</div>
 
+	<div class="divider toDoList">
+		<h3 class = "toDoHeader">
+			<!-- <button class="deleteButton deleteTask"><i class="fa fa-minus-square" aria-hidden="true"></i></button> -->
+			To Do
+			<button class="addButton"><i class="fa fa-plus-square" aria-hidden="true"></i></button>
+		</h3>
+		<ul class="toDo">
+			</ul>
+	</div>
+
 	<div class="divider inProgressList">
-		<h3 class="inProgress">In Progress</h3>
+		<h3 class="inProgressHeader">In Progress</h3>
+		<ul class="inProgress">
+			</ul>
 	</div>
 
 	<div class="divider doneList">
-		<h3 class="done">Done</h3> 
+		<h3 class="doneHeader">Done</h3>
+		<ul class="done">
+			</ul>
 	</div>
 
 	<script src="./draggable.js"></script>

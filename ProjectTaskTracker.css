@@ -15,10 +15,10 @@
 	font-size: 40px;
 	text-align: center;
 	margin-left: 0;
-	font-family: Tahoma, Geneva, sans-serif;
+	font-family: Tahoma,sans-serif;
 }
 
-.divider, .sideBar {
+.divider, .projectList {
 	position: relative;
     width: 20rem;
     height: 35rem;
@@ -45,15 +45,19 @@ h3{
 	margin-bottom: 8px;
 }
 
-.toDo {
+.toDoHeader {
 	background: #ff9999;
+	position: sticky;
+  z-index: 12;
 }
 
 .toDoList {
 	background: #fbeded;
 }
 
-.inProgress {
+.inProgressHeader {
+  position: sticky;
+  z-index: 12;
 	background: #ffdd99;
 }
 
@@ -61,20 +65,25 @@ h3{
 	background: #fdf6ef;
 }
 
-.done {
+.doneHeader {
 	background:  #9fdfbf;
+  position: sticky;
+  z-index: 12;
 }
 
 .doneList {
 	 background: #edfbf4;
 }
 
-.sideBar {
+.projectList {
 	width: 15rem;
 	background: #f7f3ef;
 }
 
-.sideBarHeader{
+.projectListHeader{
+  background: #f7f3ef;
+  position: sticky;
+  z-index: 12;
 	color:#004080;
 	text-align: center;
 	border: 3px dashed #0073e6;
@@ -98,10 +107,7 @@ h3{
 	box-shadow: 1px 2px 31px -6px rgba(0,0,0,0.6);
 }
 
-.addButton:hover {
-	box-shadow: 0px 1px 13px 0px rgba(107,72,107,1);
-}
-.deleteButton:hover{
+.addButton:hover, .deleteButton:hover {
 	box-shadow: 0px 1px 13px 0px rgba(107,72,107,1);
 }
 
@@ -114,7 +120,7 @@ h3{
 textarea {
 	z-index: 11;
 	position: relative;
-	width: 300px;
+	width: 280px;
 	border: 2px solid #CED5EA;
 	font-size:23px;
 	border-radius: 5px;
@@ -123,7 +129,31 @@ textarea {
 	margin-bottom: 5px;
 }
 
+.task {
+  margin-left: 10px;
+}
+
+ul {
+	padding: 0;
+}
+
 .projects{
 	width: 217px;
 }
 
+.fa-caret-down:hover, .fa-caret-up:hover  {
+	color: #f13062;
+  font-size: 28px;
+}
+
+
+.arrowButtons {
+	visibility: hidden;
+	display: inline-flex;
+	flex-direction: column;
+  float: right;
+  margin-top: 10px;
+  margin-right: 5px;
+  color: #292975;
+  font-size: 20px;
+}
