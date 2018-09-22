@@ -21,6 +21,32 @@ var list_toDo = [];
 var list_inProgress = [];
 var list_done = [];
 
+function displayDeleteButton(event) {
+	const deleteButton = event.srcElement.childNodes[2];
+	deleteButton.style = "visibility : visible";
+}
+
+function hideDeleteButton(event) {
+	const deleteButton = event.srcElement.childNodes[2];
+		deleteButton.style = "visibility : hidden";
+}
+
+function createDeleteButton(){
+	const deleteButton = document.createElement('i');
+	deleteButton.classList.add("fa", "fa-times-circle");
+	return deleteButton;
+}
+
+function deleteTask(event){
+	const taskDiv = event.srcElement.parentNode;
+	const taskParentDiv = taskDiv.parentNode;
+	taskParentDiv.removeChild(taskDiv);
+
+//remove from history
+	const currentActiveList = findCurrentActiveList()[0];
+	const taskIndexInList = currentActiveList.indexOf(taskDiv);
+	currentActiveList.splice(taskIndexInList, 1);
+}
 
 function addToDoTextarea() {
 	//creating a parent div for the textarea and button elements
@@ -30,14 +56,22 @@ function addToDoTextarea() {
 	//textarea div
  	const newTextarea = document.createElement('textarea');
 	newTextarea.classList.add("task" + toDoTaskNumber, "tasks");
-	//button div
+	//arrow button div
 	const arrowButtons = createArrowButtonDiv();
+	//delete button div
+	const deleteButton = createDeleteButton();
 
 	taskDiv.appendChild(newTextarea);
 	taskDiv.appendChild(arrowButtons);
+	taskDiv.appendChild(deleteButton);
+
+	deleteButton.addEventListener("click", (event)=> deleteTask(event));
 
 	newTextarea.addEventListener("blur", (event)=> removeArrowButtonDiv(event));
 	newTextarea.addEventListener("focus", (event)=> displayArrowButtons(event));
+
+	taskDiv.addEventListener("mouseenter", (event)=> displayDeleteButton(event));
+	taskDiv.addEventListener("mouseleave", (event)=> hideDeleteButton(event));
 
 	return taskDiv;
 }
@@ -51,12 +85,20 @@ function addNewProjectTextarea() {
 	newTextarea.classList.add("project" + projectNumber, "projects");
 	//button div
 	const arrowButtons = createArrowButtonDiv();
+	const deleteButton = createDeleteButton();
+	deleteButton.classList.add("deleteButton__project");
 
 	projectDiv.appendChild(newTextarea);
 	projectDiv.appendChild(arrowButtons);
+	projectDiv.appendChild(deleteButton);
+
+	deleteButton.addEventListener("click", (event)=> deleteTask(event));
 
 	newTextarea.addEventListener("blur", (event)=> removeArrowButtonDiv(event));
 	newTextarea.addEventListener("focus", (event)=> displayArrowButtons(event));
+
+	projectDiv.addEventListener("mouseenter", (event)=> displayDeleteButton(event));
+	projectDiv.addEventListener("mouseleave", (event)=> hideDeleteButton(event));
 
 	return projectDiv;
 }
@@ -200,7 +242,6 @@ function onArrowMouseDown(e) {
   e.stopPropagation();
 }
 
-
 function createArrowButtonDiv() {
 	const arrowButtons = document.createElement('div');
 	arrowButtons.classList.add("arrowButtons" + toDoTaskNumber, "arrowButtons");
@@ -235,6 +276,8 @@ function displayArrowButtons(event) {
 }
 
 function findCurrentActiveList() {
+	//currentActiveList is an array of two arrays
+	//first is the history arrays, second is the actual element ul
 	let currentListName = (document.activeElement.className).split(" ")[1];
 	let currentActiveList = [];
 	if(currentListName == "toDoList"){
